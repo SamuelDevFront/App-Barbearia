@@ -1,0 +1,30 @@
+.navbar {
+  background: linear-gradient(90deg, #1e1e1e, #333);
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+}
+
+.navbar ul a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar ul a:hover {
+  color: #00d4ff;
+  transition: 0.3s;
+}

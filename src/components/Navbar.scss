@@ -1,0 +1,38 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #222;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    transition: top 0.5s ease;
+    /* animação */
+}
+
+
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar ul li {
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.navbar ul li:hover {
+    color: #1e40af;
+    /* azul destaque */
+}
+
+.navbar-hidden {
+    top: -100px;
+    /* sobe e some */
+}

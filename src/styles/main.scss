@@ -1,0 +1,301 @@
+body {
+    position: relative;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #000;
+    /* backup se a imagem falhar */
+    color: #222;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    opacity: 0.3;
+    /* 🔥 Aqui você controla o quanto ela vai "sumir" */
+    z-index: -1;
+    pointer-events: none;
+}
+
+.navbar {
+    background: linear-gradient(90deg, #111, #333);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: "Pacifico", cursive;
+    text-align: center;
+
+    ul {
+        display: flex;
+        list-style: none;
+        gap: 1rem;
+        margin-right: 200px;
+        font-family: "Pacifico", cursive;
+        font-size: 20px;
+
+
+
+
+
+        a {
+            color: white;
+            text-decoration: none;
+
+        }
+
+
+    }
+
+    ul :hover {
+        color: rgb(216, 165, 117);
+        transition: background-color 0.3s ease-in, color 0.3s ease-out;
+
+    }
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    border: none;
+    background: #555;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.home {
+    text-align: center;
+    padding: 2rem;
+
+    .hero-image {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 12px;
+        margin-top: 1rem;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+
+    }
+}
+
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(30, 30, 30, 0.85); // tom escuro com transparência
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: #f1f1f1;
+
+    label {
+        color: #f1f1f1;
+    }
+
+    input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid #555;
+        color: #fff;
+
+        &::placeholder {
+            color: #ccc;
+        }
+    }
+
+    button {
+        background-color: #379e59;
+        color: #fff;
+
+        &:hover {
+            background-color: #4bac5b;
+        }
+    }
+}
+
+
+
+.schedule-list {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(30, 30, 30, 0.85); // fundo escuro com transparência
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: #f1f1f1;
+
+    h3 {
+        color: #f1f1f1;
+        text-align: center;
+    }
+
+    .date-group {
+        margin-bottom: 1.5rem;
+
+        h4 {
+            color: #ddd;
+            margin-bottom: 0.5rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+                padding: 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: #070606;
+
+                .info {
+                    font-weight: 500;
+                }
+
+                .status {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+
+                    .past-label {
+                        color: #f39c12;
+                    }
+
+                    .future-label {
+                        color: #2ecc71;
+                    }
+
+                    button {
+                        background: transparent;
+                        border: none;
+                        color: #e74c3c;
+                        cursor: pointer;
+                        font-size: 1.2rem;
+
+                        &:hover {
+                            color: #c0392b;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.schedule-page {
+
+    padding-top: 80px;
+    /* espaço para não ficar atrás da navbar */
+    text-align: center;
+
+    h2 {
+        margin-left: 70px
+    }
+}
+
+.hero-image {
+    width: 95%; // mais próximo das bordas
+    max-width: 900px;
+    border-radius: 10px;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ---- RESET / base para react-slick ---- */
+.slick-list,
+.slick-slider,
+.slick-track {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+}
+
+/* Força o track a ser flex para gap funcionar bem */
+.slick-track {
+    display: flex !important;
+    align-items: stretch;
+    gap: 4px;
+    /* espaço entre imagens (ajuste pra 0, 4, 8 conforme quiser) */
+    padding: 0;
+}
+
+/* Remove padding/margem padrão dos slides */
+.slick-slide {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    height: auto !important;
+}
+
+/* O wrapper interno que slick cria (o <div> dentro do slide) */
+.slick-slide>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* importante: niente padding aqui */
+    background: transparent;
+}
+
+/* ---- Estilo das imagens (filete branco uniforme) ---- */
+.carousel-image {
+    display: block;
+    width: 100%;
+    height: 320px;
+    /* ajuste altura conforme desejar */
+    object-fit: cover;
+    /* cobre sem distorcer */
+    border: 2px solid #fff;
+    /* filete branco UNIFORME em todos os lados */
+    box-sizing: border-box;
+    /* faz a borda "entrar" no tamanho */
+    border-radius: 4 px;
+    /* opcional */
+}
+
+/* Caso prefira filete só nas laterais (e borda em todo o contorno):
+   use border-left/right em vez de border, por ex:
+   .carousel-image { border-left: 4px solid #fff; border-right: 4px solid #fff; border-top: 0; border-bottom: 0; }
+*/
+
+/* Ajustes extras - remove pequenas linhas por baixo */
+.slick-list {
+    margin-bottom: 0;
+}
+
+.slick-track {
+    transform: none;
+}
+
+/* evita subpixel shifts */
+
+
+.home {
+    padding-top: 120px;
+    /* espaço para não ficar atrás da navbar */
+    text-align: center;
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: red;
+    }
+}
