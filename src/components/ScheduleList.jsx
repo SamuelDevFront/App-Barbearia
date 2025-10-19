@@ -1,34 +1,36 @@
 // src/components/ScheduleList.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaTrash, FaCheckCircle, FaClock } from 'react-icons/fa';
 import './ScheduleList.scss';
 
 const ScheduleList = ({ appointments = [], onDelete }) => {
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    // Garante que o React atualize corretamente o estado de admin
+    useEffect(() => {
+        const adminStatus = localStorage.getItem("isAdmin") === "true";
+        setIsAdmin(adminStatus);
+    }, []);
+
     if (!appointments || appointments.length === 0) return null;
 
-    // Agrupar por data, guardando também o índice original do array "appointments"
+    // Agrupar por data, guardando o índice original
     const grouped = appointments.reduce((acc, item, originalIndex) => {
-        const dateKey = item.date; // format YYYY-MM-DD esperado
+        const dateKey = item.date;
         if (!acc[dateKey]) acc[dateKey] = [];
         acc[dateKey].push({ item, originalIndex });
         return acc;
     }, {});
 
-    // Função utilitária para criar Date local a partir de item.date (YYYY-MM-DD) e item.time (HH:MM)
+    // Função para criar data local
     const buildLocalDateTime = (dateStr, timeStr) => {
-        // dateStr: "2025-10-13" ; timeStr: "17:00"
         const [y, m, d] = dateStr.split('-').map(Number);
         const [hh = 0, mm = 0] = (timeStr || '').split(':').map(Number);
-        return new Date(y, m - 1, d, hh || 0, mm || 0, 0, 0);
+        return new Date(y, m - 1, d, hh, mm, 0, 0);
     };
 
-    // Agora renderizamos as datas ordenadas
-    const sortedDates = Object.keys(grouped).sort((a, b) => {
-        // ordem crescente
-        const da = new Date(a + 'T00:00'); // ok para ordenação
-        const db = new Date(b + 'T00:00');
-        return da - db;
-    });
+    // Ordenar as datas
+    const sortedDates = Object.keys(grouped).sort((a, b) => new Date(a) - new Date(b));
 
     const now = new Date();
 
@@ -37,9 +39,8 @@ const ScheduleList = ({ appointments = [], onDelete }) => {
             <h3 style={{ marginBottom: '20px', textAlign: 'center' }}>Agendamentos Confirmados</h3>
 
             {sortedDates.map((date) => {
-                const group = grouped[date]; // array de { item, originalIndex }
+                const group = grouped[date];
 
-                // Exibe data no formato pt-BR com dia da semana
                 let dateLabel = '';
                 try {
                     const [y, m, d] = date.split('-').map(Number);
@@ -59,32 +60,27 @@ const ScheduleList = ({ appointments = [], onDelete }) => {
                         <h4>{dateLabel}</h4>
 
                         <ul>
-                            {group.map(({ item, originalIndex }, idx) => {
-                                // Cria datetime local (evita problema de fuso)
+                            {group.map(({ item, originalIndex }) => {
                                 const appointmentDate = buildLocalDateTime(item.date, item.time);
-                                // normaliza agora com horas/minutos para comparação justa
+
                                 const nowClean = new Date(
                                     now.getFullYear(),
                                     now.getMonth(),
                                     now.getDate(),
                                     now.getHours(),
-                                    now.getMinutes(),
-                                    0,
-                                    0
+                                    now.getMinutes()
                                 );
+
                                 const appointmentClean = new Date(
                                     appointmentDate.getFullYear(),
                                     appointmentDate.getMonth(),
                                     appointmentDate.getDate(),
                                     appointmentDate.getHours(),
-                                    appointmentDate.getMinutes(),
-                                    0,
-                                    0
+                                    appointmentDate.getMinutes()
                                 );
 
                                 const isPast = appointmentClean < nowClean;
 
-                                // chave segura: se item.id existir use, senão combine campos
                                 const key = item.id ?? `${item.date}-${item.time}-${originalIndex}`;
 
                                 return (
@@ -93,7 +89,13 @@ const ScheduleList = ({ appointments = [], onDelete }) => {
                                         className={isPast ? 'appointment past' : 'appointment future'}
                                     >
                                         <div className="info">
-                                            <strong>{item.name}</strong> — {item.time}
+                                            {/* ✅ Só o admin vê o nome do cliente */}
+                                            {isAdmin ? (
+                                                <strong>{item.name}</strong>
+                                            ) : (
+                                                <strong>Agendado</strong>
+                                            )}{" "}
+                                            — {item.time}
                                         </div>
 
                                         <div className="status">
@@ -107,16 +109,18 @@ const ScheduleList = ({ appointments = [], onDelete }) => {
                                                 </span>
                                             )}
 
-                                            <button
-                                                onClick={() => {
-                                                    // chama onDelete com o índice original do appointment no array principal
-                                                    if (typeof onDelete === 'function') onDelete(originalIndex);
-                                                }}
-                                                title="Excluir"
-                                                aria-label="Excluir agendamento"
-                                            >
-                                                <FaTrash />
-                                            </button>
+                                            {/* ✅ Só o admin pode excluir */}
+                                            {isAdmin && (
+                                                <button
+                                                    onClick={() => {
+                                                        if (typeof onDelete === 'function') onDelete(originalIndex);
+                                                    }}
+                                                    title="Excluir"
+                                                    aria-label="Excluir agendamento"
+                                                >
+                                                    <FaTrash />
+                                                </button>
+                                            )}
                                         </div>
                                     </li>
                                 );

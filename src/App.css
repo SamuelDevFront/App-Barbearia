@@ -1,70 +1,134 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+/* src/App.scss */
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-body {
+/* Top bar fixa */
+.top-bar {
   position: relative;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  background-color: #000;
-  /* fallback escuro */
-  overflow-x: hidden;
+  top: 0;
+  left: 0px;
+  width: 100%;
+  height: 60px;
+  background: var(--bg-color, #111);
+  color: var(--text-color, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* brand centralizado por padrão */
+  padding: 0 20px;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
+/* hamburger wrapper (canto esquerdo) */
+.hamburger-wrapper {
+  position: absolute;
+  left: 16px;
+  top: 10px;
+  z-index: 1100;
+}
+
+/* botão hamburger */
+.hamburger-btn {
+  width: 42px;
+  height: 36px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 26px;
+  height: 3px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+/* animação quando aberto */
+.hamburger-btn.open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* menu dropdown do hamburger */
+.hamburger-menu {
+  position: absolute;
+  top: 48px;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('/barbearia-nova.avif') no-repeat center center fixed;
-  background-size: cover;
-  opacity: 0.3;
-  /* opacidade visível */
-  z-index: -1;
-  pointer-events: none;
+  background: rgba(17, 17, 17, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px;
+  border-radius: 8px;
+  min-width: 200px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* itens do menu */
+.hamburger-item {
+  background: transparent;
+  border: none;
+  color: #fff;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+  font-weight: 600;
+}
+
+.hamburger-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.hamburger-item.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffcc00;
+}
+
+.brand-title {
+  position: absolute;
+  top: 50%;
+  left: 70px;
+  /* 🔹 empurra um pouco pra direita (pode ajustar esse valor) */
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+
+/* container do botão de tema, canto direito */
+.theme-toggle-container {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  z-index: 1100;
+}
+
+/* Responsivo: reduz tamanho do título em telas pequenas */
+@media (max-width: 720px) {
+  .brand-title {
+    font-size: 1rem;
+  }
+
+  .hamburger-menu {
+    min-width: 160px;
+  }
 }

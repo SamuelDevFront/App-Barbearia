@@ -1,7 +1,9 @@
 .home {
+
     padding-top: 120px;
     /* espaço para não ficar atrás da navbar */
     text-align: center;
+
 
     h2 {
         font-size: 2rem;
@@ -581,5 +583,122 @@ iframe {
 
     &:hover {
         transform: translateY(-5px);
+    }
+}
+
+/* ==== SETAS DO CARROSSEL (slick) ==== */
+.slick-prev,
+.slick-next {
+    width: 45px;
+    height: 45px;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    background-color: #d4a55d;
+    /* dourado elegante */
+    transform: scale(1.1);
+}
+
+/* Ícones internos das setas */
+.slick-prev:before,
+.slick-next:before {
+    font-size: 22px;
+    color: white;
+    opacity: 1;
+}
+
+/* Corrige posicionamento das setas */
+.slick-prev {
+    left: 15px;
+}
+
+.slick-next {
+    right: 15px;
+}
+
+.slick-prev,
+.slick-next {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+
+    .slick-prev,
+    .slick-next {
+        width: 35px;
+        height: 35px;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+        font-size: 18px;
+    }
+
+    .slick-prev {
+        left: 5px;
+    }
+
+    .slick-next {
+        right: 5px;
+    }
+}
+
+/* ===== AJUSTE MOBILE - Corrige imagem "Conheça o Samuel" ===== */
+@media (max-width: 768px) {
+    .about-section {
+        padding: 60px 0;
+
+        .about-container {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            /* garante espaçamento lateral igual aos textos */
+        }
+
+        .about-image img {
+            width: 90%;
+            max-width: 350px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .about-text {
+            text-align: center;
+            width: 100%;
+            padding: 0 10px;
+
+            h2 {
+                text-align: center;
+                width: 100%;
+                font-size: 1.8rem;
+            }
+
+            p {
+                text-align: center;
+                margin: 0 auto 1.5rem;
+                line-height: 1.6;
+                width: 90%;
+            }
+
+            button {
+                align-self: center;
+            }
+        }
     }
 }

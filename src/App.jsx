@@ -4,9 +4,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Cadastro from "./pages/Cadastro";
-import Schedule from "./pages/Schedule"; // usa o Schedule existente
+import Schedule from "./pages/Schedule";
 import ThemeToggle from "./components/ThemeToggle";
 import WhatsAppButton from "./components/WhatsAppButton";
+import AdminLogin from "./components/AdminLogin";
+import HamburgerMenu from "./components/HamburgerMenu";
+import "./App.scss";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -14,20 +17,28 @@ function App() {
   return (
     <div className={darkMode ? "dark" : "light"}>
       <BrowserRouter>
-        {/* Navbar sempre visível */}
-        <Navbar />
+        {/* Menu hambúrguer fixo no canto esquerdo */}
+        <HamburgerMenu />
 
-        {/* Alternar tema */}
-        <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+        {/* Topo com título central e tema à direita */}
+        <div className="top-bar">
+          <div className="brand-title">Samuca Barbearia</div>
+          <div className="theme-toggle-container">
+            <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+          </div>
+        </div>
 
-        {/* Rotas principais */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/agendamento" element={<Schedule />} />
-        </Routes>
+        {/* Conteúdo principal abaixo do topo */}
+        <div style={{ marginTop: "80px" }}>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/agendamento" element={<Schedule />} />
+            <Route path="/admin" element={<AdminLogin />} />
+          </Routes>
+        </div>
 
-        {/* Botão flutuante do WhatsApp */}
         <WhatsAppButton />
       </BrowserRouter>
     </div>
