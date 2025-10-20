@@ -41,3 +41,17 @@
     margin-left: 35px;
     display: flex;
 }
+
+@media (max-width: 768px) {
+    /* ... o que você já tem ... */
+
+    /* Reduz o tamanho do texto dos links no mobile */
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+
+    /* Reduz o espaçamento entre eles */
+    .nav-links {
+        gap: 8px;
+    }
+}

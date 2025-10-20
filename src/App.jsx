@@ -30,7 +30,7 @@ function App() {
 
         {/* Conteúdo principal abaixo do topo */}
         <div style={{ marginTop: "80px" }}>
-          <Navbar />
+          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cadastro" element={<Cadastro />} />
