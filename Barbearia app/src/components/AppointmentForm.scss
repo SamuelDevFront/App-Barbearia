@@ -1,0 +1,47 @@
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #111;
+    /* fundo escuro */
+    padding: 20px;
+    border-radius: 8px;
+    color: #fff;
+
+    label {
+        font-weight: bold;
+    }
+
+    input,
+    select,
+    button {
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+    }
+
+    input,
+    select {
+        background-color: #222;
+        color: #fff;
+    }
+
+    button {
+        background-color: #11e9be;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background-color: #019874;
+    }
+}
+
+/* Estilizar o ícone do calendário do input[type="date"] */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(82%) sepia(99%) saturate(550%) hue-rotate(10deg) brightness(110%) contrast(105%);
+
+    cursor: pointer;
+}

@@ -1,0 +1,187 @@
+.navbar-gold {
+  background-color: #080808;
+  border-bottom: 2px solid #d4af37;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 12px 24px;
+
+  .navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .btn-hamburger-gold {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.15);
+      }
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+
+      .logo-icon {
+        font-size: 1.4rem;
+      }
+
+      .logo-text {
+        background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-family: 'Georgia', serif;
+        font-weight: bold;
+        font-size: 1.25rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    .nav-link {
+      color: #e0e0e0;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s, text-shadow 0.3s;
+
+      &:hover {
+        color: #fcf6ba;
+        text-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
+      }
+    }
+  }
+
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    .btn-theme-gold {
+      background: rgba(212, 175, 55, 0.1);
+      color: #fcf6ba;
+      border: 1px solid #d4af37;
+      border-radius: 6px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &:hover {
+        background: rgba(212, 175, 55, 0.25);
+        box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+      }
+    }
+
+    .btn-agendar-gold {
+      background: linear-gradient(180deg, #ffe082 0%, #d4af37 45%, #aa771c 100%);
+      color: #000;
+      font-weight: bold;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: 1px solid #fff3b0;
+      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.6);
+      }
+    }
+  }
+
+  /* MENU DROPDOWN MOBILE / EXTRA LINKS */
+  .mobile-drawer-gold {
+    background-color: #0e0e0e;
+    border-top: 1px solid #222222;
+    border-bottom: 1px solid #d4af37;
+    margin-top: 12px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: fadeInDown 0.25s ease-in-out;
+
+    .mobile-nav-link {
+      color: #fcf6ba;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(212, 175, 55, 0.2);
+
+      &:hover {
+        color: #ffffff;
+        padding-left: 6px;
+        transition: all 0.2s ease;
+      }
+    }
+
+    .btn-theme-mobile {
+      background: rgba(212, 175, 55, 0.15);
+      color: #fcf6ba;
+      border: 1px solid #d4af37;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
