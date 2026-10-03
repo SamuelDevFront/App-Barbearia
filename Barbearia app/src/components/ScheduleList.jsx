@@ -15,7 +15,6 @@ const Schedule = () => {
   const [agendadoComSucesso, setAgendadoComSucesso] = useState(false);
   const [dataFormatadaBR, setDataFormatadaBR] = useState("");
 
-  // Carrega cliente autenticado no início
   useEffect(() => {
     const usuarioLogado = localStorage.getItem("usuarioLogado") || localStorage.getItem("cliente");
     if (!usuarioLogado) {
@@ -62,7 +61,6 @@ const Schedule = () => {
       return;
     }
 
-    // 1. BLOQUEAR DATAS PASSADAS
     const dataSelecionada = new Date(`${formData.data}T00:00:00`);
     const dataAtual = new Date();
     dataAtual.setHours(0, 0, 0, 0);
@@ -72,7 +70,6 @@ const Schedule = () => {
       return;
     }
 
-    // 2. DIAS DE FUNCIONAMENTO (TERÇA A SÁBADO)
     const diaDaSemana = dataSelecionada.getDay();
     if (diaDaSemana === 0 || diaDaSemana === 1) {
       alert("A Barbearia do Samuca não abre aos domingos e segundas-feiras. Por favor, escolha um dia de terça a sábado.");
@@ -82,7 +79,6 @@ const Schedule = () => {
     const dataBR = formatarDataBR(formData.data);
     const agendamentosExistentes = JSON.parse(localStorage.getItem("agendamentos") || "[]");
 
-    // 3. EVITAR DUPLICIDADE DE HORÁRIO
     const horarioOcupado = agendamentosExistentes.some((item) => {
       return item.data === dataBR && item.horario === formData.horario;
     });
@@ -102,7 +98,6 @@ const Schedule = () => {
       status: "Pendente"
     };
 
-    // ADICIONA NO INÍCIO DO ARRAY
     const listaAtualizada = [novoAgendamento, ...agendamentosExistentes];
     localStorage.setItem("agendamentos", JSON.stringify(listaAtualizada));
 
@@ -110,8 +105,8 @@ const Schedule = () => {
     setAgendadoComSucesso(true);
   };
 
-  // FUNÇÃO QUE LIMPA/RESETA TOTALMENTE O FORMULÁRIO
   const handleNovoAgendamento = () => {
+    setAgendadoComSucesso(false);
     setFormData({
       nome: "",
       telefone: "",
@@ -119,8 +114,6 @@ const Schedule = () => {
       data: "",
       horario: "09:00"
     });
-
-    setAgendadoComSucesso(false);
   };
 
   const goldTextStyle = {
@@ -151,20 +144,30 @@ const Schedule = () => {
     <div style={{
       backgroundColor: "#0d0d0d",
       minHeight: "100vh",
-      padding: "50px 20px",
+      padding: "30px 12px",
       color: "#ffffff",
       display: "flex",
       alignItems: "center",
-      justifyContent: "center"
+      justifyContent: "center",
+      boxSizing: "border-box",
+      width: "100%"
     }}>
       <style>{`
         input[type="date"]::-webkit-calendar-picker-indicator {
           filter: invert(0.8) sepia(1) saturate(5) hue-rotate(5deg);
           cursor: pointer;
         }
+        @media (max-width: 480px) {
+          .schedule-card {
+            padding: 20px 16px !important;
+          }
+          .schedule-title {
+            font-size: 1.5rem !important;
+          }
+        }
       `}</style>
 
-      <div style={{
+      <div className="schedule-card" style={{
         backgroundColor: "rgba(22, 22, 22, 0.95)",
         border: "1px solid rgba(212, 175, 55, 0.4)",
         borderRadius: "16px",
@@ -172,10 +175,11 @@ const Schedule = () => {
         maxWidth: "500px",
         width: "100%",
         boxShadow: "0 10px 30px rgba(0, 0, 0, 0.8)",
-        backdropFilter: "blur(8px)"
+        backdropFilter: "blur(8px)",
+        boxSizing: "border-box"
       }}>
         
-        <h1 style={{ 
+        <h1 className="schedule-title" style={{ 
           ...goldTextStyle, 
           fontSize: "2rem", 
           textAlign: "center", 
@@ -184,18 +188,17 @@ const Schedule = () => {
           AGENDAR HORÁRIO
         </h1>
 
-        <p style={{ textAlign: "center", color: "#a0a0a0", fontSize: "0.9rem", marginBottom: "30px" }}>
+        <p style={{ textAlign: "center", color: "#a0a0a0", fontSize: "0.85rem", marginBottom: "25px" }}>
           Escolha o serviço, a data e o horário para o seu atendimento na Barbearia do Samuca.
         </p>
 
         {agendadoComSucesso ? (
-          <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "15px" }}>✅</div>
-            <h2 style={{ color: "#fcf6ba", fontSize: "1.4rem", marginBottom: "10px" }}>
+          <div style={{ textAlign: "center", padding: "15px 0" }}>
+            <div style={{ fontSize: "2.8rem", marginBottom: "10px" }}>✅</div>
+            <h2 style={{ color: "#fcf6ba", fontSize: "1.3rem", marginBottom: "10px" }}>
               Agendamento Confirmado!
             </h2>
-            <p style={{ color: "#cccccc", fontSize: "0.95rem", marginBottom: "20px", lineHeight: "1.5" }}>
-              Obrigado, <strong style={{ color: "#d4af37" }}>{formData.nome}</strong>!<br />
+            <p style={{ color: "#cccccc", fontSize: "0.9rem", marginBottom: "20px", lineHeight: "1.5" }}>
               Seu horário para <strong>{formData.servico}</strong> foi agendado para o dia <strong>{dataFormatadaBR}</strong> às <strong>{formData.horario}</strong>.
             </p>
             <button 
@@ -206,9 +209,8 @@ const Schedule = () => {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
             
-            {/* NOME */}
             <div>
               <label style={{ display: "block", color: "#fcf6ba", fontSize: "0.85rem", marginBottom: "6px" }}>
                 Nome Completo:
@@ -226,13 +228,13 @@ const Schedule = () => {
                   backgroundColor: "#121212",
                   border: "1px solid #333333",
                   color: "#ffffff",
-                  fontSize: "0.95rem"
+                  fontSize: "0.95rem",
+                  boxSizing: "border-box"
                 }}
                 required 
               />
             </div>
 
-            {/* TELEFONE */}
             <div>
               <label style={{ display: "block", color: "#fcf6ba", fontSize: "0.85rem", marginBottom: "6px" }}>
                 WhatsApp / Telefone:
@@ -250,13 +252,13 @@ const Schedule = () => {
                   backgroundColor: "#121212",
                   border: "1px solid #333333",
                   color: "#ffffff",
-                  fontSize: "0.95rem"
+                  fontSize: "0.95rem",
+                  boxSizing: "border-box"
                 }}
                 required 
               />
             </div>
 
-            {/* SERVIÇO */}
             <div>
               <label style={{ display: "block", color: "#fcf6ba", fontSize: "0.85rem", marginBottom: "6px" }}>
                 Serviço Desejado:
@@ -273,7 +275,8 @@ const Schedule = () => {
                   border: "1px solid #333333",
                   color: "#ffffff",
                   fontSize: "0.95rem",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  boxSizing: "border-box"
                 }}
               >
                 <option value="Corte normal - R$ 45,00">Corte normal - R$ 45,00</option>
@@ -283,7 +286,6 @@ const Schedule = () => {
               </select>
             </div>
 
-            {/* DATA */}
             <div>
               <label style={{ display: "flex", alignItems: "center", gap: "6px", color: "#fcf6ba", fontSize: "0.85rem", marginBottom: "6px" }}>
                 📅 Data do Atendimento:
@@ -302,13 +304,13 @@ const Schedule = () => {
                   border: "1px solid #333333",
                   color: "#ffffff",
                   fontSize: "0.95rem",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  boxSizing: "border-box"
                 }}
                 required 
               />
             </div>
 
-            {/* HORÁRIO */}
             <div>
               <label style={{ display: "block", color: "#fcf6ba", fontSize: "0.85rem", marginBottom: "6px" }}>
                 Horário:
@@ -325,7 +327,8 @@ const Schedule = () => {
                   border: "1px solid #333333",
                   color: "#ffffff",
                   fontSize: "0.95rem",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  boxSizing: "border-box"
                 }}
               >
                 <option value="09:00">09:00</option>
