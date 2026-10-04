@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { db } from "../services/firebase";
+import { collection, addDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore";
 
 const Schedule = () => {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ const Schedule = () => {
 
   const [agendadoComSucesso, setAgendadoComSucesso] = useState(false);
   const [dataFormatadaBR, setDataFormatadaBR] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
     const usuarioLogado = localStorage.getItem("usuarioLogado") || localStorage.getItem("cliente");
@@ -53,7 +56,7 @@ const Schedule = () => {
     return dataString;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.nome || !formData.telefone || !formData.data || !formData.horario) {
@@ -77,32 +80,43 @@ const Schedule = () => {
     }
 
     const dataBR = formatarDataBR(formData.data);
-    const agendamentosExistentes = JSON.parse(localStorage.getItem("agendamentos") || "[]");
 
-    const horarioOcupado = agendamentosExistentes.some((item) => {
-      return item.data === dataBR && item.horario === formData.horario;
-    });
+    try {
+      setEnviando(true);
 
-    if (horarioOcupado) {
-      alert(`O horário das ${formData.horario} no dia ${dataBR} já está reservado por outro cliente. Por favor, escolha outro horário ou data.`);
-      return;
+      // Verificação de horário ocupado direto na nuvem (Firebase)
+      const q = query(
+        collection(db, "agendamentos"),
+        where("data", "==", dataBR),
+        where("horario", "==", formData.horario)
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        alert(`O horário das ${formData.horario} no dia ${dataBR} já está reservado por outro cliente. Por favor, escolha outro horário ou data.`);
+        setEnviando(false);
+        return;
+      }
+
+      // Salva o agendamento no Firestore (nuvem)
+      await addDoc(collection(db, "agendamentos"), {
+        nome: formData.nome,
+        telefone: formData.telefone,
+        servico: formData.servico,
+        data: dataBR,
+        horario: formData.horario,
+        status: "Pendente",
+        criadoEm: serverTimestamp()
+      });
+
+      setDataFormatadaBR(dataBR);
+      setAgendadoComSucesso(true);
+    } catch (error) {
+      console.error("Erro ao salvar agendamento no Firebase:", error);
+      alert("Erro ao conectar com o servidor. Tente novamente em instantes.");
+    } finally {
+      setEnviando(false);
     }
-
-    const novoAgendamento = {
-      id: Date.now(),
-      nome: formData.nome,
-      telefone: formData.telefone,
-      servico: formData.servico,
-      data: dataBR,
-      horario: formData.horario,
-      status: "Pendente"
-    };
-
-    const listaAtualizada = [novoAgendamento, ...agendamentosExistentes];
-    localStorage.setItem("agendamentos", JSON.stringify(listaAtualizada));
-
-    setDataFormatadaBR(dataBR);
-    setAgendadoComSucesso(true);
   };
 
   const handleNovoAgendamento = () => {
@@ -134,10 +148,11 @@ const Schedule = () => {
     borderRadius: "8px",
     border: "1px solid #fff3b0",
     boxShadow: "0 4px 15px rgba(212, 175, 55, 0.4)",
-    cursor: "pointer",
+    cursor: enviando ? "not-allowed" : "pointer",
     textTransform: "uppercase",
     width: "100%",
-    marginTop: "10px"
+    marginTop: "10px",
+    opacity: enviando ? 0.7 : 1
   };
 
   return (
@@ -344,8 +359,8 @@ const Schedule = () => {
               </select>
             </div>
 
-            <button type="submit" style={goldButtonStyle}>
-              Confirmar Agendamento
+            <button type="submit" disabled={enviando} style={goldButtonStyle}>
+              {enviando ? "A Agendar..." : "Confirmar Agendamento"}
             </button>
           </form>
         )}
