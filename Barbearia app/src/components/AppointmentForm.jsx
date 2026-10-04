@@ -77,7 +77,7 @@ const AppointmentForm = () => {
     try {
       setEnviando(true);
 
-      // Checa disponibilidade na nuvem
+      // Consulta no Firebase para garantir que o horário não está reservado
       const q = query(
         collection(db, "agendamentos"),
         where("data", "==", dataBR),
@@ -86,12 +86,12 @@ const AppointmentForm = () => {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        alert(`O horário das ${formData.horario} no dia ${dataBR} já está reservado por outro cliente.`);
+        alert(`O horário das ${formData.horario} no dia ${dataBR} já está reservado por outro cliente. Por favor, escolha outro horário ou data.`);
         setEnviando(false);
         return;
       }
 
-      // Salva no Firestore
+      // Grava no Cloud Firestore
       await addDoc(collection(db, "agendamentos"), {
         nome: formData.nome,
         telefone: formData.telefone,
@@ -106,7 +106,7 @@ const AppointmentForm = () => {
       setAgendadoComSucesso(true);
     } catch (error) {
       console.error("Erro ao salvar no Firebase:", error);
-      alert("Erro ao conectar com o servidor do Firebase. Verifique sua conexão e tente novamente.");
+      alert("Erro ao conectar com o banco de dados. Tente novamente em instantes.");
     } finally {
       setEnviando(false);
     }
@@ -118,9 +118,11 @@ const AppointmentForm = () => {
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: "3rem" }}>✅</div>
           <h2 style={{ color: "#d4af37" }}>Agendamento Confirmado!</h2>
-          <p>Seu horário para <strong>{formData.servico}</strong> foi agendado para <strong>{dataFormatadaBR}</strong> às <strong>{formData.horario}</strong>.</p>
-          <button onClick={() => setAgendadoComSucesso(false)} style={{ width: "100%", padding: "12px", backgroundColor: "#d4af37", color: "#000", fontWeight: "bold", border: "none", borderRadius: "6px", marginTop: "15px", cursor: "pointer" }}>
-            Novo Agendamento
+          <p style={{ marginTop: "10px", lineHeight: "1.5" }}>
+            Seu horário para <strong>{formData.servico}</strong> foi agendado para o dia <strong>{dataFormatadaBR}</strong> às <strong>{formData.horario}</strong>.
+          </p>
+          <button onClick={() => setAgendadoComSucesso(false)} style={{ width: "100%", padding: "12px", backgroundColor: "#d4af37", color: "#000", fontWeight: "bold", border: "none", borderRadius: "6px", marginTop: "20px", cursor: "pointer" }}>
+            Fazer Novo Agendamento
           </button>
         </div>
       ) : (
@@ -128,17 +130,17 @@ const AppointmentForm = () => {
           <h2 style={{ color: "#d4af37", textAlign: "center" }}>AGENDAR HORÁRIO</h2>
           
           <div>
-            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem" }}>Nome Completo:</label>
+            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem", color: "#fcf6ba" }}>Nome Completo:</label>
             <input type="text" name="nome" value={formData.nome} onChange={handleChange} required style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #333", backgroundColor: "#121212", color: "#fff" }} />
           </div>
 
           <div>
-            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem" }}>WhatsApp / Telefone:</label>
+            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem", color: "#fcf6ba" }}>WhatsApp / Telefone:</label>
             <input type="text" name="telefone" value={formData.telefone} onChange={handleChange} required style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #333", backgroundColor: "#121212", color: "#fff" }} />
           </div>
 
           <div>
-            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem" }}>Serviço:</label>
+            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem", color: "#fcf6ba" }}>Serviço Desejado:</label>
             <select name="servico" value={formData.servico} onChange={handleChange} style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #333", backgroundColor: "#121212", color: "#fff" }}>
               <option value="Corte normal - R$ 45,00">Corte normal - R$ 45,00</option>
               <option value="Barba completa - R$ 35,00">Barba completa - R$ 35,00</option>
@@ -148,12 +150,12 @@ const AppointmentForm = () => {
           </div>
 
           <div>
-            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem" }}>Data:</label>
+            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem", color: "#fcf6ba" }}>Data do Atendimento:</label>
             <input type="date" name="data" min={hoje} value={formData.data} onChange={handleChange} required style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #333", backgroundColor: "#121212", color: "#fff" }} />
           </div>
 
           <div>
-            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem" }}>Horário:</label>
+            <label style={{ display: "block", marginBottom: "5px", fontSize: "0.85rem", color: "#fcf6ba" }}>Horário:</label>
             <select name="horario" value={formData.horario} onChange={handleChange} style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #333", backgroundColor: "#121212", color: "#fff" }}>
               <option value="09:00">09:00</option>
               <option value="10:00">10:00</option>
